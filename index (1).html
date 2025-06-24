@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raighar Boys Hostel</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    header {
+      background-color: #00695c;
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      color: #00695c;
+    }
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    form input, form select {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    form button {
+      background-color: #004d40;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color: #00695c;
+    }
+    footer {
+      background-color: #004d40;
+      color: white;
+      text-align: center;
+      padding: 1em 0;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Raighar Boys Hostel</h1>
+    <p>College of Agricultural Engieering and technology</p>
+  </header>
+
+  <div class="container">
+
+    <div class="section">
+      <h2>Management</h2>
+      <div class="card"><strong>Rector:</strong> Dr. Y. Bisen Sir</div>
+      <div class="card"><strong>Warden:</strong> Shree Dilip Nikhade</div>
+    </div>
+
+    <div class="section">
+      <h2>Support Staff</h2>
+      <div class="card">shree Pawar Bhau - Worker</div>
+      <div class="card">shree Ram Bhau - Worker</div>
+      <div class="card">shree Ritesh Bhau - Worker</div>
+      <div class="card">shree Shiva Bhau - Security Guard</div>
+    </div>
+
+    <div class="section">
+      <h2>Hostel Students</h2>
+      <p>This section contains the list of students categorized by academic year.</p>
+      <div class="section">
+        <h3>1st Year</h3>
+        <ul id="year1List">
+        </ul>
+      </div>
+      <div class="section">
+        <h3>2nd Year</h3>
+        <ul id="year2List">
+        </ul>
+      </div>
+      <div class="section">
+        <h3>3rd Year</h3>
+        <ul id="year3List">
+        </ul>
+      </div>
+      <div class="section">
+        <h3>4th Year</h3>
+        <ul id="year4List">
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Register New Student</h2>
+      <form id="registrationForm">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="roll">Roll Number:</label>
+        <input type="text" id="roll" name="roll" required>
+
+        <label for="room">Room Number:</label>
+        <input type="text" id="room" name="room" required>
+
+        <label for="year">Academic Year:</label>
+        <select id="year" name="year">
+          <option value="1st">1st Year</option>
+          <option value="2nd">2nd Year</option>
+          <option value="3rd">3rd Year</option>
+          <option value="4th">4th Year</option>
+        </select>
+
+        <button type="submit">Register</button>
+      </form>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Raighar Boys Hostel | Designed by Om Nikhade</p>
+  </footer>
+
+  <script>
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const roll = document.getElementById('roll').value;
+      const room = document.getElementById('room').value;
+      const year = document.getElementById('year').value;
+
+      const newStudent = document.createElement('li');
+      newStudent.textContent = `${name} - Roll No: ${roll} - Room: ${room}`;
+
+      const listId = {
+        '1st': 'year1List',
+        '2nd': 'year2List',
+        '3rd': 'year3List',
+        '4th': 'year4List'
+      }[year];
+
+      document.getElementById(listId).appendChild(newStudent);
+
+      document.getElementById('registrationForm').reset();
+    });
+  </script>
+</body>
+</html>
