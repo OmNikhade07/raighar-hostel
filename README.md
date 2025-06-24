@@ -1,374 +1,261 @@
-# raighar-hostel
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Raighar Boys Hostel</title>
+  <title>Library Control System - Admin</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #eef1f4;
+      background: #f4f6f8;
       padding: 20px;
+      color: #333;
     }
-    h1, h2 {
+
+    h1 {
+      text-align: center;
       color: #2c3e50;
     }
-    .section {
-      background: white;
-      padding: 15px;
-      margin-bottom: 20px;
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
+
+    form {
+      margin-bottom: 30px;
+    }
+
     input, select, button {
-      margin-top: 5px;
-      padding: 8px;
-      width: 100%;
-      margin-bottom: 10px;
+      padding: 10px;
+      margin: 5px;
+      width: 90%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      display: block;
     }
-    ul {
-      padding-left: 20px;
+
+    button {
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      border: none;
+      transition: 0.3s;
     }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 10px;
     }
+
     th, td {
-      padding: 8px;
-      border: 1px solid #ccc;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
     }
+
     th {
-      background: #dff0ff;
+      background-color: #f0f0f0;
     }
-    #loginBox {
-      max-width: 400px;
-      margin: auto;
-      display: none;
+
+    .issued {
+      background-color: #dff0d8;
     }
+
+    .returned {
+      background-color: #f2dede;
+    }
+
     .hidden {
       display: none;
     }
-    img {
-      max-height: 40px;
-      border-radius: 5px;
-      margin-left: 5px;
-      vertical-align: middle;
-    }
-    #logoutBtn {
-      float: right;
-      background: red;
-      color: white;
-      width: auto;
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-    @media screen and (max-width: 600px) {
-      body { padding: 10px; }
-      h1 { font-size: 22px; }
-      .section { padding: 10px; }
+
+    .logout-btn {
+      background: crimson;
+      margin: 10px;
+      width: 120px;
     }
   </style>
 </head>
 <body>
+  <h1>📚 Library Control System</h1>
+  <div class="container">
 
-<button onclick="showLogin()" style="float:right;margin-bottom:10px;">Login</button>
-<button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
+    <!-- Login Section -->
+    <div id="loginSection">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
 
-<h1>Raighar Boys Hostel Dashboard</h1>
+    <!-- Main App Section -->
+    <div id="appSection" class="hidden">
+      <button class="logout-btn" onclick="logout()">Logout</button>
 
-<div class="section">
-  <h2>Hostel Management</h2>
-  <ul>
-    <li><strong>Rector:</strong> Dr. Y. Bisen</li>
-    <li><strong>Warden:</strong> Shree Dilip Nikhade</li>
-    <li><strong>Security:</strong> Shree Shiva Bhau</li>
-    <li><strong>Workers:</strong> Ram Bhau, Pawar Bhau, Ritesh Bhau</li>
-    <li><strong>Current Prefect:</strong> Saurabh Goverdipe</li>
-  </ul>
-  <p><strong>Login Role:</strong> <span id="roleDisplay">None (View-only)</span></p>
-</div>
+      <!-- Add Book -->
+      <div class="section">
+        <h2>Add Book</h2>
+        <form id="addBookForm">
+          <input type="text" id="bookTitle" placeholder="Book Title" required>
+          <input type="text" id="authorName" placeholder="Author Name" required>
+          <button type="submit">Add Book</button>
+        </form>
+      </div>
 
-<!-- Login Box -->
-<div class="section" id="loginBox">
-  <h2>Login</h2>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <p id="loginMessage" style="color:red;"></p>
-</div>
+      <!-- Issue/Return Book -->
+      <div class="section">
+        <h2>Issue / Return Book</h2>
+        <form id="issueReturnForm">
+          <select id="bookSelect" required>
+            <option value="">-- Select Book --</option>
+          </select>
+          <select id="action" required>
+            <option value="issue">📤 Issue</option>
+            <option value="return">📥 Return</option>
+          </select>
+          <input type="text" id="studentName" placeholder="Student Name" required>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
 
-<!-- Committee Section -->
-<div class="section">
-  <h2>Committees</h2>
-  <div id="committeeControls" class="hidden">
-    <label>Select Committee</label>
-    <select id="committeeName">
-      <option value="Mess Committee">Mess Committee</option>
-      <option value="Maintenance Committee">Maintenance Committee</option>
-      <option value="Sports Committee">Sports Committee</option>
-      <option value="Gardening Committee">Gardening Committee</option>
-      <option value="Library Committee">Library Committee</option>
-    </select>
-    <input type="text" id="memberName" placeholder="Enter Member Name">
-    <input type="file" id="studentImage" accept="image/*">
-    <button onclick="addCommitteeMember()">Add Member</button>
-    <button onclick="exportCommittees()">Export Committee Data (CSV)</button>
+      <!-- Log Table -->
+      <div class="section">
+        <h2>Book Activity Log</h2>
+        <table id="logTable">
+          <thead>
+            <tr>
+              <th>Book Title</th>
+              <th>Author</th>
+              <th>Student</th>
+              <th>Action</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Logs will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-  <div id="committeeList"></div>
-</div>
 
-<!-- Library Section -->
-<div class="section">
-  <h2>Library</h2>
-  <div id="libraryControls" class="hidden">
-    <input type="text" id="bookName" placeholder="Book Title">
-    <input type="text" id="bookAuthor" placeholder="Author">
-    <button onclick="addBook()">Add Book</button>
-    <button onclick="exportLibrary()">Export Library Data (CSV)</button>
-  </div>
+  <script>
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "admin123";
 
-  <h3>Available Books</h3>
-  <table id="bookTable">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Status</th>
-        <th>User</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+    const books = JSON.parse(localStorage.getItem("books") || "[]");
+    const log = JSON.parse(localStorage.getItem("log") || "[]");
 
-<script>
-  let userRole = "";
-  let committees = {};
-  let libraryBooks = [];
+    const loginSection = document.getElementById("loginSection");
+    const appSection = document.getElementById("appSection");
+    const bookSelect = document.getElementById("bookSelect");
+    const logTableBody = document.querySelector("#logTable tbody");
 
-  function showLogin() {
-    document.getElementById("loginBox").style.display = "block";
-  }
-
-  function login() {
-    const user = document.getElementById("username").value.trim().toLowerCase();
-    const pass = document.getElementById("password").value.trim();
-    const msg = document.getElementById("loginMessage");
-
-    if (user === "admin" && pass === "admin123") {
-      userRole = "Admin";
-    } else if (user === "prefect" && pass === "saurabh123") {
-      userRole = "Prefect";
-    } else if (user === "rector" && pass === "bisen123") {
-      userRole = "Rector";
-    } else {
-      msg.textContent = "Invalid credentials!";
-      return;
-    }
-
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("roleDisplay").textContent = userRole;
-    document.getElementById("logoutBtn").classList.remove("hidden");
-
-    if (userRole === "Admin" || userRole === "Prefect") {
-      document.getElementById("committeeControls").classList.remove("hidden");
-      document.getElementById("libraryControls").classList.remove("hidden");
-    }
-
-    displayCommittees();
-    displayBooks();
-  }
-
-  function logout() {
-    userRole = "";
-    document.getElementById("roleDisplay").textContent = "None (View-only)";
-    document.getElementById("committeeControls").classList.add("hidden");
-    document.getElementById("libraryControls").classList.add("hidden");
-    document.getElementById("logoutBtn").classList.add("hidden");
-    displayCommittees();
-    displayBooks();
-  }
-
-  function saveCommittees() {
-    localStorage.setItem("committees", JSON.stringify(committees));
-  }
-
-  function loadCommittees() {
-    const data = localStorage.getItem("committees");
-    committees = data ? JSON.parse(data) : {};
-  }
-
-  function addCommitteeMember() {
-    const committee = document.getElementById("committeeName").value;
-    const member = document.getElementById("memberName").value;
-    const fileInput = document.getElementById("studentImage");
-
-    if (!committees[committee]) committees[committee] = [];
-
-    if (member) {
-      if (fileInput.files.length > 0) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const imageData = e.target.result;
-          committees[committee].push(`${member} <img src="${imageData}" width="40">`);
-          displayCommittees();
-          saveCommittees();
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        committees[committee].push(member);
-        displayCommittees();
-        saveCommittees();
-      }
-      document.getElementById("memberName").value = '';
-      fileInput.value = '';
-    }
-  }
-
-  function removeCommitteeMember(committee, index) {
-    if (committees[committee]) {
-      committees[committee].splice(index, 1);
-      if (committees[committee].length === 0) delete committees[committee];
-      saveCommittees();
-      displayCommittees();
-    }
-  }
-
-  function displayCommittees() {
-    const div = document.getElementById("committeeList");
-    div.innerHTML = "";
-    for (let committee in committees) {
-      const members = committees[committee];
-      const list = members.map((member, index) => {
-        return `<li>
-          ${member}
-          ${userRole === "Admin" || userRole === "Prefect" ? 
-            `<button onclick="removeCommitteeMember('${committee}', ${index})" style="margin-left:10px;">Remove</button>` : ""}
-        </li>`;
-      }).join("");
-      div.innerHTML += `<div>
-        <strong>${committee}:</strong>
-        <ul>${list}</ul>
-      </div>`;
-    }
-  }
-
-  function saveBooks() {
-    localStorage.setItem("libraryBooks", JSON.stringify(libraryBooks));
-  }
-
-  function loadBooks() {
-    const data = localStorage.getItem("libraryBooks");
-    libraryBooks = data ? JSON.parse(data) : [];
-  }
-
-  function addBook() {
-    const title = document.getElementById("bookName").value;
-    const author = document.getElementById("bookAuthor").value;
-    if (title && author) {
-      libraryBooks.push({ title, author, status: "Available", user: "-", date: null });
-      displayBooks();
-      saveBooks();
-      document.getElementById("bookName").value = '';
-      document.getElementById("bookAuthor").value = '';
-    }
-  }
-
-  function removeBook(index) {
-    if (confirm("Are you sure you want to delete this book?")) {
-      libraryBooks.splice(index, 1);
-      saveBooks();
-      displayBooks();
-    }
-  }
-
-  function displayBooks() {
-    const tbody = document.getElementById("bookTable").querySelector("tbody");
-    tbody.innerHTML = "";
-    const today = new Date();
-
-    libraryBooks.forEach((book, index) => {
-      const issueDate = book.date ? new Date(book.date) : null;
-      let overdue = "";
-
-      if (issueDate) {
-        const diff = Math.floor((today - issueDate) / (1000 * 60 * 60 * 24));
-        if (diff > 7) overdue = "<span style='color:red;'> Overdue!</span>";
-      }
-
-      const row = tbody.insertRow();
-      row.innerHTML = `
-        <td>${book.title}</td>
-        <td>${book.author}</td>
-        <td>${book.status}</td>
-        <td>${book.user}${overdue}</td>
-        <td>
-          ${userRole === "Admin" || userRole === "Prefect" ? `
-            <button onclick="issueBook(${index})">Issue</button>
-            <button onclick="returnBook(${index})">Return</button>
-            <button onclick="removeBook(${index})">Remove</button>` : `View Only`}
-        </td>
-      `;
-    });
-  }
-
-  function issueBook(index) {
-    if (userRole !== "Admin" && userRole !== "Prefect") return;
-    const name = prompt("Enter student name:");
-    if (name) {
-      libraryBooks[index].status = "Issued";
-      libraryBooks[index].user = name;
-      libraryBooks[index].date = new Date().toISOString();
-      displayBooks();
-      saveBooks();
-    }
-  }
-
-  function returnBook(index) {
-    if (userRole !== "Admin" && userRole !== "Prefect") return;
-    libraryBooks[index].status = "Available";
-    libraryBooks[index].user = "-";
-    libraryBooks[index].date = null;
-    displayBooks();
-    saveBooks();
-  }
-
-  function exportCommittees() {
-    let csv = "Committee,Member\n";
-    for (const committee in committees) {
-      committees[committee].forEach(member => {
-        const cleanText = member.replace(/<[^>]+>/g, '');
-        csv += `"${committee}","${cleanText}"\n`;
+    function updateBookDropdown() {
+      bookSelect.innerHTML = '<option value="">-- Select Book --</option>';
+      books.forEach((book, index) => {
+        bookSelect.innerHTML += `<option value="${index}">${book.title} by ${book.author}</option>`;
       });
     }
-    downloadCSV(csv, "committees.csv");
-  }
 
-  function exportLibrary() {
-    let csv = "Title,Author,Status,User,IssueDate\n";
-    libraryBooks.forEach(book => {
-      csv += `"${book.title}","${book.author}","${book.status}","${book.user}","${book.date || '-'}"\n`;
+    function updateLogTable() {
+      logTableBody.innerHTML = "";
+      log.slice().reverse().forEach(entry => {
+        const tr = document.createElement("tr");
+        tr.className = entry.action === "issue" ? "issued" : "returned";
+        tr.innerHTML = `
+          <td>${entry.title}</td>
+          <td>${entry.author}</td>
+          <td>${entry.student}</td>
+          <td>${entry.action.toUpperCase()}</td>
+          <td>${entry.date}</td>
+        `;
+        logTableBody.appendChild(tr);
+      });
+    }
+
+    // Add Book
+    document.getElementById("addBookForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const title = document.getElementById("bookTitle").value.trim();
+      const author = document.getElementById("authorName").value.trim();
+      books.push({ title, author });
+      localStorage.setItem("books", JSON.stringify(books));
+      updateBookDropdown();
+      this.reset();
+      alert("Book added!");
     });
-    downloadCSV(csv, "library_books.csv");
-  }
 
-  function downloadCSV(csv, filename) {
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }
+    // Issue/Return
+    document.getElementById("issueReturnForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const bookIndex = bookSelect.value;
+      const student = document.getElementById("studentName").value.trim();
+      const action = document.getElementById("action").value;
+      const book = books[bookIndex];
 
-  // Load saved data on startup
-  loadCommittees();
-  loadBooks();
-  displayCommittees();
-  displayBooks();
-</script>
+      if (!book) return alert("Select a valid book!");
 
+      log.push({
+        title: book.title,
+        author: book.author,
+        student,
+        action,
+        date: new Date().toLocaleString()
+      });
+
+      localStorage.setItem("log", JSON.stringify(log));
+      updateLogTable();
+      this.reset();
+    });
+
+    // Admin Login
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+
+      if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
+        localStorage.setItem("adminLoggedIn", "true");
+        showApp();
+      } else {
+        alert("Invalid credentials!");
+      }
+    });
+
+    function showApp() {
+      loginSection.classList.add("hidden");
+      appSection.classList.remove("hidden");
+      updateBookDropdown();
+      updateLogTable();
+    }
+
+    function logout() {
+      localStorage.removeItem("adminLoggedIn");
+      location.reload();
+    }
+
+    // Auto login if already logged in
+    if (localStorage.getItem("adminLoggedIn") === "true") {
+      showApp();
+    }
+  </script>
 </body>
 </html>
+
